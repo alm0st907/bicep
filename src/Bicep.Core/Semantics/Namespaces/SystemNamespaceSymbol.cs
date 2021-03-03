@@ -520,6 +520,14 @@ namespace Bicep.Core.Semantics.Namespaces
                 .WithEvaluator(MergeToTargetObject("metadata", decoratorSyntax => SyntaxFactory.CreateObject(
                     SyntaxFactory.CreateObjectProperty("description", SingleArgumentSelector(decoratorSyntax)).AsEnumerable())))
                 .Build();
+
+            yield return new DecoratorBuilder("batchSize")
+                .WithDescription("Causes the resource or module for-expression to be run in sequential batches of specified size instead of the default behavior where all the resources or modules are deployed in parallel.")
+                .WithRequiredParameter("batchSize", LanguageConstants.Int, "The size of the batch")
+                .WithFlags(FunctionFlags.ResourceOrModuleDecorator)
+                // the decorator is constrained to resources and modules already - checking for array alone is simple and should be sufficient
+                .WithAttachableType(LanguageConstants.Array)
+                .Build();
         }
 
         public SystemNamespaceSymbol() : base("sys", SystemOverloads, BannedFunctions, GetSystemDecorators())

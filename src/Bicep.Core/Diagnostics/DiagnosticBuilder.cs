@@ -717,7 +717,7 @@ namespace Bicep.Core.Diagnostics
                 "BCP123",
                 "Expected a namespace or decorator name at this location.");
 
-            public ErrorDiagnostic CannotAttacheDecoratorToTarget(string decoratorName, TypeSymbol attachableType, TypeSymbol targetType) => new(
+            public ErrorDiagnostic CannotAttachDecoratorToTarget(string decoratorName, TypeSymbol attachableType, TypeSymbol targetType) => new(
                 TextSpan,
                 "BCP124",
                 $"The decorator \"{decoratorName}\" can only be attached to targets of type \"{attachableType}\", but the target has type \"{targetType}\".");
@@ -864,6 +864,11 @@ namespace Bicep.Core.Diagnostics
                 TextSpan,
                 "BCP152",
                 $"Function \"{functionName}\" cannot be used as a decorator.");
+
+            public ErrorDiagnostic ExpectedResourceOrModuleDeclarationAfterDecorator() => new(
+                TextSpan,
+                "BCP153",
+                "Expected a resource or module declaration after the decorator.");
         }
 
         public static DiagnosticBuilderInternal ForPosition(TextSpan span)
