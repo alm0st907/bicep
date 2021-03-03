@@ -869,6 +869,16 @@ namespace Bicep.Core.Diagnostics
                 TextSpan,
                 "BCP153",
                 "Expected a resource or module declaration after the decorator.");
+
+            public ErrorDiagnostic BatchSizeTooSmall(long value, long limit) => new(
+                TextSpan,
+                "BCP154",
+                $"Expected a batch size of at least {limit} but the specified value was \"{value}\".");
+
+            public ErrorDiagnostic BatchSizeNotAllowed(string decoratorName) => new(
+                TextSpan,
+                "BCP155",
+                $"The decorator \"{decoratorName}\" can only be attached to resource or module collections.");
         }
 
         public static DiagnosticBuilderInternal ForPosition(TextSpan span)

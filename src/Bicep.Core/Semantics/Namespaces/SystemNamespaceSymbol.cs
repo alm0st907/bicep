@@ -526,7 +526,24 @@ namespace Bicep.Core.Semantics.Namespaces
                 .WithRequiredParameter("batchSize", LanguageConstants.Int, "The size of the batch")
                 .WithFlags(FunctionFlags.ResourceOrModuleDecorator)
                 // the decorator is constrained to resources and modules already - checking for array alone is simple and should be sufficient
-                .WithAttachableType(LanguageConstants.Array)
+                .WithValidator((decoratorName, decoratorSyntax, targetType, typeManager, diagnosticWriter) =>
+                {
+                    // the type checker should have already verified that there's only 1 int compile-time constant argument
+                    var batchSizeSyntax = (IntegerLiteralSyntax)SingleArgumentSelector(decoratorSyntax);
+
+                    const long MinimumBatchSize = 1;
+                    if (batchSizeSyntax.Value < MinimumBatchSize)
+                    {
+                        diagnosticWriter.Write(DiagnosticBuilder.ForPosition(batchSizeSyntax).BatchSizeTooSmall(batchSizeSyntax.Value, MinimumBatchSize));
+                    }
+
+                    if(!TypeValidator.AreTypesAssignable(targetType, LanguageConstants.Array))
+                    {
+                        // the resource/module declaration is not a collection
+                        // (the compile-time constnat and resource/module placement is already enforced, so we don't need a deeper type check)
+                        diagnosticWriter.Write(DiagnosticBuilder.ForPosition(decoratorSyntax).BatchSizeNotAllowed(decoratorName));
+                    }
+                })
                 .Build();
         }
 
