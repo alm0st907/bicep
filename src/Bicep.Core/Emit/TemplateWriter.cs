@@ -305,6 +305,11 @@ namespace Bicep.Core.Emit
             memoryWriter.WriteEndArray();
         }
 
+        private long? GetBatchSize(StatementSyntax decoratedSyntax)
+        {
+            decoratedSyntax.Decorators
+        }
+
         private void EmitResource(JsonTextWriter memoryWriter, ResourceSymbol resourceSymbol, ExpressionEmitter emitter)
         {
             memoryWriter.WriteStartObject();
